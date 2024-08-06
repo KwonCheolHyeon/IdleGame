@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class RunScript : ICharacterState
 {
-    private float attackRange = 2.0f; // 공격을 시작할 거리
+    private float attackRange = 1.0f; // 공격을 시작할 거리
 
     public void EnterState(PlayerScript character)
     {
