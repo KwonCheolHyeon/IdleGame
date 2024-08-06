@@ -12,7 +12,6 @@ public class CameraScript : MonoBehaviour
 
     public void CameraSetting(GameObject playerObj) 
     {
-       
         if (playerObj != null)
         {
             player = playerObj.transform;
@@ -22,8 +21,6 @@ public class CameraScript : MonoBehaviour
         {
             Debug.LogError("플레이어를 찾지 못하였습니다");
         }
-        
-        
     }
 
     void LateUpdate()
