@@ -16,22 +16,20 @@ public class PlayerScript : MonoBehaviour
     public Vector2 inputVec;
     public Rigidbody2D rigid;
     public Animator animator; // Animator 추가
-    public float speed;
     public Transform targetEnemy; // 타겟팅된 적
+
+    public float runSpeed; // 걷는 속도
     void Start()
     {
         animator = GetComponent<Animator>();
         rigid = GetComponent<Rigidbody2D>();
-        speed = 3.0f;
+        runSpeed = 3.0f;
         SetState(idleState);
     }
 
-    void Update()
+    private void Update()
     {
-        if (currentState != null)
-        {
-            currentState.UpdateState(this);
-        }
+        currentState.UpdateState(this);
     }
 
     private void FixedUpdate()

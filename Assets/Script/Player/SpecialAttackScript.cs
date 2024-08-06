@@ -18,12 +18,6 @@ public class SpecialAttackScript : ICharacterState
     {
 
     }
-
-    public void HandleInput(PlayerScript character)
-    {
-
-    }
-
     public void UpdateState(PlayerScript character)
     {
 

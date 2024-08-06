@@ -18,10 +18,6 @@ public class DeathScript : ICharacterState
 
     }
 
-    public void HandleInput(PlayerScript character)
-    {
-
-    }
 
     public void UpdateState(PlayerScript character)
     {

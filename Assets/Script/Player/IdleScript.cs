@@ -21,11 +21,6 @@ public class IdleScript : ICharacterState
 
     }
 
-    public void HandleInput(PlayerScript character)
-    {
-
-    }
-
     public void UpdateState(PlayerScript character)
     {
         FindTarget(character);

@@ -8,5 +8,4 @@ public interface ICharacterState
     void UpdateState(PlayerScript character);
     void FixedUpdateState(PlayerScript character);
     void ExitState(PlayerScript character);
-    void HandleInput(PlayerScript character);
 }

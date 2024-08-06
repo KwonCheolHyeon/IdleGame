@@ -19,11 +19,6 @@ public class AttackScript : ICharacterState
 
     }
 
-    public void HandleInput(PlayerScript character)
-    {
-
-    }
-
     public void UpdateState(PlayerScript character)
     {
 
