@@ -10,19 +10,20 @@ public class CameraScript : MonoBehaviour
     {
     }
 
-    public void CameraSetting() 
+    public void CameraSetting(GameObject playerObj) 
     {
-        GameObject playerObject = GameObject.Find("Unit000");
-        if (playerObject != null)
+       
+        if (playerObj != null)
         {
-            player = playerObject.transform;
+            player = playerObj.transform;
+            offset = transform.position - playerObj.transform.position;
         }
         else
         {
             Debug.LogError("플레이어를 찾지 못하였습니다");
         }
-        // 초기 오프셋을 계산
-        offset = transform.position - player.position;
+        
+        
     }
 
     void LateUpdate()
