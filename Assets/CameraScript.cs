@@ -25,7 +25,7 @@ public class CameraScript : MonoBehaviour
 
     void LateUpdate()
     {
-        // LateUpdate는 모든 Update가 끝난 후에 호출되므로, 카메라가 플레이어를 따라가도록 보장합니다.
+        
         if (player != null) 
         {
             transform.position = player.position + offset;

@@ -4,20 +4,15 @@ using UnityEngine;
 
 public class RunScript : ICharacterState
 {
-    private float attackRange = 1.0f; // 공격을 시작할 거리
-
     public void EnterState(PlayerScript character)
     {
+        Debug.Log("달리기 ON");
         character.animator.SetBool("IsRun", true);
-        if (character.targetEnemy == null)
-        {
-            character.SetState(character.idleState);
-            return;
-        }
     }
 
     public void ExitState(PlayerScript character)
     {
+        Debug.Log("달리기 OFF");
         character.animator.SetBool("IsRun", false);
     }
     public void UpdateState(PlayerScript character)
@@ -30,19 +25,21 @@ public class RunScript : ICharacterState
 
         float distanceToEnemy = Vector3.Distance(character.transform.position, character.targetEnemy.position);
 
-        if (distanceToEnemy <= attackRange)
+        if (distanceToEnemy <= character.attackRange)
         {
-            // 공격 범위 내에 적이 있을 때 상태를 공격 상태로 전환
-            character.SetState(character.attackState);
+            character.SetState(character.idleState);
+            return;
         }
+
+        
+        Vector3 direction = (character.targetEnemy.position - character.transform.position).normalized;
+        character.transform.position += direction * character.runSpeed * Time.deltaTime;
+
+
     }
     public void FixedUpdateState(PlayerScript character)
     {
-        if (character.targetEnemy != null)
-        {
-            Vector3 direction = (character.targetEnemy.position - character.transform.position).normalized;
-            character.transform.position += direction * character.runSpeed * Time.deltaTime;
-        }
+        
     }
 
 }

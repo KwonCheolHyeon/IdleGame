@@ -1,26 +1,72 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 
 public class AttackScript : ICharacterState
 {
+    private bool hasAttacked; // 한번만 공격하도록 하기 위한 플래그
+    private bool animationFinished = false;
     public void EnterState(PlayerScript character)
     {
+        Debug.Log("공격 ON");
         character.animator.SetBool("IsAttack", true);
+        hasAttacked = false; // 공격 상태에 들어갈 때 플래그 초기화
     }
 
     public void ExitState(PlayerScript character)
     {
+        Debug.Log("공격 off");
         character.animator.SetBool("IsAttack", false);
     }
 
     public void FixedUpdateState(PlayerScript character)
     {
-
+       
     }
 
     public void UpdateState(PlayerScript character)
     {
 
+        // 현재 애니메이터의 상태 정보 가져오기
+        AnimatorStateInfo stateInfo = character.animator.GetCurrentAnimatorStateInfo(0);
+
+        if (stateInfo.IsName("2_Attack_Normal") && stateInfo.normalizedTime >= 1 && !character.animator.IsInTransition(0))
+        {
+            if (!animationFinished)
+            {
+                animationFinished = true;
+                ChangeState(character);
+            }
+        }
+        else
+        {
+            animationFinished = false;
+        }
+
+
+        // 공격이 시작된 후 한번만 공격 로직을 실행
+        if (!hasAttacked && character.targetEnemy != null)
+        {
+            // 적에게 데미지 주기
+            EnemyScript enemy = character.targetEnemy.GetComponent<EnemyScript>();
+            if (enemy != null)
+            {
+                enemy.TakeDamage(character.attackPoint);//적에게 데미지
+                character.canAttack = false;
+                character.AttackCoolTime(0);
+                hasAttacked = true;
+            }
+        }
+
+       
     }
+
+    private void ChangeState(PlayerScript character) 
+    {
+        character.SetState(character.idleState);
+    }
+
+
+
 }
