@@ -5,13 +5,13 @@ using UnityEngine;
 
 public class PlayerScript : MonoBehaviour
 {
-    public ICharacterState currentState { get; private set; }
+    public IPlayerState currentState { get; private set; }
 
-    public ICharacterState idleState = new IdleScript();
-    public ICharacterState runState = new RunScript();
-    public ICharacterState attackState = new AttackScript();
-    public ICharacterState specialAttackState = new SpecialAttackScript();
-    public ICharacterState deathState = new DeathScript();
+    public IPlayerState idleState = new IdleScript();
+    public IPlayerState runState = new RunScript();
+    public IPlayerState attackState = new AttackScript();
+    public IPlayerState specialAttackState = new SpecialAttackScript();
+    public IPlayerState deathState = new DeathScript();
 
     public Vector2 inputVec;
     public Rigidbody2D rigid;
@@ -37,6 +37,7 @@ public class PlayerScript : MonoBehaviour
     {
         animator = GetComponent<Animator>();
         rigid = GetComponent<Rigidbody2D>();
+
         runSpeed = 3.0f;
         specialAttackTimer = 5.0f;
         canSpecialAttack = true;
@@ -56,7 +57,7 @@ public class PlayerScript : MonoBehaviour
         currentState.FixedUpdateState(this);
     }
 
-    public void SetState(ICharacterState newState)
+    public void SetState(IPlayerState newState)
     {
         if (currentState != null)
         {
@@ -73,11 +74,11 @@ public class PlayerScript : MonoBehaviour
 
     public void AttackCoolTime(int type)
     {
-        if (type == 0 && !isAttackCooldownActive) // Normal Attack
+        if (type == 0 && !isAttackCooldownActive)
         {
             StartCoroutine(CooldownCoroutine(attackTimer, () => canAttack = true, () => isAttackCooldownActive = false));
         }
-        else if (type == 1 && !isSpecialAttackCooldownActive) // Special Attack
+        else if (type == 1 && !isSpecialAttackCooldownActive) 
         {
             StartCoroutine(CooldownCoroutine(specialAttackTimer, () => canSpecialAttack = true, () => isSpecialAttackCooldownActive = false));
         }
@@ -85,15 +86,10 @@ public class PlayerScript : MonoBehaviour
 
     private IEnumerator CooldownCoroutine(float cooldownTime, System.Action onCooldownEnd, System.Action onCooldownComplete)
     {
-        onCooldownComplete(); // Mark cooldown as active
+        onCooldownComplete(); 
         yield return new WaitForSeconds(cooldownTime);
         onCooldownEnd();
-        onCooldownComplete(); // Mark cooldown as complete
+        onCooldownComplete(); 
     }
-
-    //private IEnumerator HitCoolTime() 
-    //{
-    //    yield return new WaitForSeconds(hitTimer);
-    //}
 
 }

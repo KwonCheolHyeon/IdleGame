@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SpecialAttackScript : ICharacterState
+public class SpecialAttackScript : IPlayerState
 {
     private bool hasAttacked;
     private bool animationFinished;

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RunScript : ICharacterState
+public class RunScript : IPlayerState
 {
     public void EnterState(PlayerScript character)
     {
@@ -14,6 +14,7 @@ public class RunScript : ICharacterState
     {
         Debug.Log("´Þ¸®±â OFF");
         character.animator.SetBool("IsRun", false);
+        character.inputVec = Vector2.zero;
     }
     public void UpdateState(PlayerScript character)
     {
@@ -35,7 +36,16 @@ public class RunScript : ICharacterState
         Vector3 direction = (character.targetEnemy.position - character.transform.position).normalized;
         character.transform.position += direction * character.runSpeed * Time.deltaTime;
 
+        character.inputVec = new Vector2(direction.x, direction.y);
 
+        if (character.inputVec.x < 0)
+        {
+            character.transform.localScale = new Vector3(1, 1, 1);
+        }
+        else if (character.inputVec.x > 0)
+        {
+            character.transform.localScale = new Vector3(-1, 1, 1);
+        }
     }
     public void FixedUpdateState(PlayerScript character)
     {

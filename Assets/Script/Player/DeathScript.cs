@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DeathScript : ICharacterState
+public class DeathScript : IPlayerState
 {
     public void EnterState(PlayerScript character)
     {

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class IdleScript : ICharacterState
+public class IdleScript : IPlayerState
 {
     public void EnterState(PlayerScript character)
     {
