@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 
 public class EnemyScript : MonoBehaviour
@@ -17,7 +18,10 @@ public class EnemyScript : MonoBehaviour
 
     public float attackPoint;//공격력
     public float defensePoint; // 방어력
-    public float monsterHealthPoint;
+    public int monsterHealthPoint;
+    public float baseMonsterAp;
+    public float baseMonsterDp;
+    public int baseMonsterHp;
     public float runSpeed; // 걷는 속도
     public bool canAttack;//일반 공격
     public float attackTimer;//공격
@@ -25,16 +29,13 @@ public class EnemyScript : MonoBehaviour
 
     public float attackRange = 1.0f; // 공격을 시작할 거리
     private bool isAttackCooldownActive = false;
+
     void Start()
     {
         animator = GetComponent<Animator>();
         rigid = GetComponent<Rigidbody2D>();
 
-        monsterHealthPoint = 10.0f;
-        runSpeed = 3.0f;
-        attackTimer = 1.0f;
-        canAttack = true;
-        attackPoint = 1.0f;
+        
         SetState(idleState);
     }
 
@@ -60,16 +61,11 @@ public class EnemyScript : MonoBehaviour
 
     public void TakeDamage(float attackPoint)
     {
-        monsterHealthPoint -= attackPoint;
+        monsterHealthPoint -= (int)(attackPoint - defensePoint);
         if (monsterHealthPoint <= 0) 
         {
             SetState(deathState);
         }
-    }
-
-    public void OnDestroy()
-    {
-        Destroy(gameObject);
     }
 
     public void AttackCoolTime(int type)
@@ -86,6 +82,28 @@ public class EnemyScript : MonoBehaviour
         yield return new WaitForSeconds(cooldownTime);
         onCooldownEnd();
         onCooldownComplete();
+    }
+
+    public void MonsterSetting(int stageCount)
+    {
+        baseMonsterAp = 5 * SetStageMonsterStat(stageCount);
+        baseMonsterDp = 5 * SetStageMonsterStat(stageCount);
+        baseMonsterHp = 10 * SetStageMonsterStat(stageCount);
+
+
+        attackPoint = baseMonsterAp * stageCount;//공격력
+        defensePoint = baseMonsterDp * stageCount; // 방어력
+        monsterHealthPoint = baseMonsterHp * stageCount;
+
+        runSpeed = 3.0f; // 걷는 속도
+        canAttack = true;//일반 공격
+        attackTimer = 1.5f;//공격
+    }
+
+    private int SetStageMonsterStat(int statgeCount) 
+    {
+        int stat = (statgeCount + 4) / 5;
+        return stat;
     }
 
 }

@@ -44,8 +44,8 @@ public class PlayerScript : MonoBehaviour
         canSpecialAttack = true;
         attackTimer = 1.0f;
         canAttack = true;
-        attackPoint = 2.0f;
-        healthPoint = 100;
+        attackPoint = 20.0f;
+        healthPoint = 1000;
 
         SetState(idleState);
     }

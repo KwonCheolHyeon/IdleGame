@@ -5,17 +5,33 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public static GameManager Instance;
+    private static GameManager instance;
+    public static GameManager Instance
+    {
+        get
+        {
+            // 인스턴스가 존재하지 않는다면 새로 생성
+            if (instance == null)
+            {
+                instance = FindObjectOfType<GameManager>();
+                if (instance == null)
+                {
+                    GameObject singletonObject = new GameObject();
+                    instance = singletonObject.AddComponent<GameManager>();
+
+                    // 수동으로 초기화 메서드 호출
+                    instance.Start();
+                }
+            }
+            return instance;
+        }
+    }
 
     public PlayerScript player;
+    public int stageCount { get; private set; }
 
-    private void Awake()
-    {
-        Instance = this;
-    }
     private void Start()
     {
-
         // Resources에서 프리팹을 로드
         GameObject playerPrefab = Resources.Load<GameObject>("SPUM/SPUM_Units/Unit000");
         Vector3 spawnPosition = new Vector3(0, 0, 0);
@@ -25,14 +41,11 @@ public class GameManager : MonoBehaviour
         GameObject playerInstance = Instantiate(playerPrefab, spawnPosition, spawnRotation);
         if (playerInstance != null)
         {
-            
+
             Transform childTransform = playerInstance.transform.Find("UnitRoot");
             if (childTransform != null)
             {
-              
                 player = childTransform.gameObject.GetComponent<PlayerScript>();
-
-                // 카메라 설정
                 Camera.main.GetComponent<CameraScript>().CameraSetting(childTransform.gameObject);
             }
             else
@@ -46,7 +59,11 @@ public class GameManager : MonoBehaviour
         }
 
 
+        stageCount = 1;
+    }
 
-
+    public void MonsterStageUp() 
+    {
+        stageCount += 1;
     }
 }

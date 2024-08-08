@@ -29,7 +29,6 @@ public class SpecialAttackScript : IPlayerState
     {
         AnimatorStateInfo stateInfo = character.animator.GetCurrentAnimatorStateInfo(0);
 
-        // "5_Skill_Normal" 애니메이션이 진행 중일 때
         if (stateInfo.IsName("5_Skill_Normal"))
         {
             // 애니메이션이 끝났을 때
@@ -41,23 +40,21 @@ public class SpecialAttackScript : IPlayerState
                     character.SetState(character.idleState);
                 }
             }
-            // 애니메이션이 절반 진행되었을 때 적에게 데미지를 줌
-            else if (stateInfo.normalizedTime >= 0.5f && !hasAttacked && character.targetEnemy != null)
+            else if (stateInfo.normalizedTime >= 0.5f && !hasAttacked)
             {
-                EnemyScript enemy = character.targetEnemy.GetComponent<EnemyScript>();
-                if (enemy != null)
+                if (character.targetEnemy != null && character.targetEnemy.gameObject.activeSelf)
                 {
-                    enemy.TakeDamage(character.attackPoint * 2); // 적에게 데미지
-                    character.canSpecialAttack = false;
-                    character.AttackCoolTime(1);
-                    hasAttacked = true;
+                    Debug.Log("스킬 공격 성공");
+                    EnemyScript enemy = character.targetEnemy.GetComponent<EnemyScript>();
+                    if (enemy != null)
+                    {
+                        enemy.TakeDamage(character.attackPoint * 2); // 적에게 데미지
+                        character.canSpecialAttack = false;
+                        character.AttackCoolTime(1);
+                        hasAttacked = true;
+                    }
                 }
             }
-        }
-        else 
-        {
-            Debug.LogError("스킬 공격 에러");
-            character.SetState(character.idleState);
         }
     }
 

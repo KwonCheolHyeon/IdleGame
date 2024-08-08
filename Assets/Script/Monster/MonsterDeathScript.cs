@@ -29,7 +29,7 @@ public class MonsterDeathScript : IMonsterState
             if (!animationFinished)
             {
                 animationFinished = true;
-                character.gameObject.SetActive(false);
+                character.gameObject.transform.parent.gameObject.SetActive(false);
             }
         }
     }

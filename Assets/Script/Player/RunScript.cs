@@ -25,6 +25,18 @@ public class RunScript : IPlayerState
             return;
         }
 
+        CheckStopForAttack(character);
+
+        MoveTowardsEnemy(character);
+    }
+    public void FixedUpdateState(PlayerScript character)
+    {
+        
+    }
+
+    private void CheckStopForAttack(PlayerScript character) 
+    {
+
         float distanceToEnemy = Vector3.Distance(character.transform.position, character.targetEnemy.position);
 
         if (distanceToEnemy <= character.attackRange)
@@ -32,8 +44,9 @@ public class RunScript : IPlayerState
             character.SetState(character.idleState);
             return;
         }
-
-        
+    }
+    private void MoveTowardsEnemy(PlayerScript character)
+    {
         Vector3 direction = (character.targetEnemy.position - character.transform.position).normalized;
         character.transform.position += direction * character.runSpeed * Time.deltaTime;
 
@@ -48,9 +61,4 @@ public class RunScript : IPlayerState
             character.transform.localScale = new Vector3(-1, 1, 1);
         }
     }
-    public void FixedUpdateState(PlayerScript character)
-    {
-        
-    }
-
 }

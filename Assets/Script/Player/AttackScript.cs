@@ -44,20 +44,24 @@ public class AttackScript : IPlayerState
                 }
             }
             // 애니메이션이 절반 진행되었을 때
-            else if (stateInfo.normalizedTime >= 0.5f && !hasAttacked && character.targetEnemy != null)
+            else if (stateInfo.normalizedTime >= 0.5f && !hasAttacked)
             {
-                // 적에게 데미지 주기
-                EnemyScript enemy = character.targetEnemy.GetComponent<EnemyScript>();
-                if (enemy != null)
+                if (character.targetEnemy != null && character.targetEnemy.gameObject.activeSelf)
                 {
-                    enemy.TakeDamage(character.attackPoint); // 적에게 데미지
-                    character.canAttack = false;
-                    character.AttackCoolTime(0);
-                    hasAttacked = true;
+                    Debug.Log("공격 성공");
+                    // 적에게 데미지 주기
+                    EnemyScript enemy = character.targetEnemy.GetComponent<EnemyScript>();
+                    if (enemy != null)
+                    {
+                        enemy.TakeDamage(character.attackPoint); // 적에게 데미지
+                        character.canAttack = false;
+                        character.AttackCoolTime(0); // 쿨타임 설정
+                        hasAttacked = true;
+                    }
                 }
             }
         }
-        else 
+        else
         {
             Debug.LogError("일반 공격 에러");
             character.SetState(character.idleState);
