@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 
 public class IdleScript : IPlayerState
 {
@@ -22,7 +23,6 @@ public class IdleScript : IPlayerState
 
     public void UpdateState(PlayerScript character)
     {
-
         if (character.targetEnemy != null)
         {
             if (!character.targetEnemy.gameObject.activeSelf)
@@ -32,21 +32,9 @@ public class IdleScript : IPlayerState
                 return;
             }
 
-            float distanceToEnemy = Vector3.Distance(character.transform.position, character.targetEnemy.position);
+            FlipCharacter(character);
 
-            if (distanceToEnemy <= character.attackRange)
-            {
-                if (character.canSpecialAttack)
-                {
-                    character.SetState(character.specialAttackState);
-                    return;
-                }
-                else if (character.canAttack)
-                {
-                    character.SetState(character.attackState);
-                    return;
-                }
-            }
+            TryAttackEnemy(character);
         }
         else
         {
@@ -89,6 +77,42 @@ public class IdleScript : IPlayerState
         else
         {
             Debug.Log("Àû ¾øÀ½");
+        }
+    }
+
+    private void TryAttackEnemy(PlayerScript character) 
+    {
+        float distanceToEnemy = Vector3.Distance(character.transform.position, character.targetEnemy.position);
+
+        if (distanceToEnemy <= character.attackRange)
+        {
+            if (character.canSpecialAttack)
+            {
+                character.SetState(character.specialAttackState);
+                return;
+            }
+            else if (character.canAttack)
+            {
+                character.SetState(character.attackState);
+                return;
+            }
+        }
+    }
+
+    private void FlipCharacter(PlayerScript character) 
+    {
+        Vector3 direction = (character.targetEnemy.position - character.transform.position).normalized;
+        
+
+        character.inputVec = new Vector2(direction.x, direction.y);
+
+        if (character.inputVec.x < 0)
+        {
+            character.transform.localScale = new Vector3(1, 1, 1);
+        }
+        else if (character.inputVec.x > 0)
+        {
+            character.transform.localScale = new Vector3(-1, 1, 1);
         }
     }
 }

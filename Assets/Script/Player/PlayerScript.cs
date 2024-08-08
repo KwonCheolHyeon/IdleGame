@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.IO.LowLevel.Unsafe;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 
 public class PlayerScript : MonoBehaviour
 {
@@ -52,6 +53,7 @@ public class PlayerScript : MonoBehaviour
     private void Update()
     {
         currentState.UpdateState(this);
+        
     }
 
     private void FixedUpdate()
