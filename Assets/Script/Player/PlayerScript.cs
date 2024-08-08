@@ -44,6 +44,8 @@ public class PlayerScript : MonoBehaviour
         attackTimer = 1.0f;
         canAttack = true;
         attackPoint = 2.0f;
+        healthPoint = 100;
+
         SetState(idleState);
     }
 
@@ -69,7 +71,11 @@ public class PlayerScript : MonoBehaviour
 
     public void TakeDamage(float attackPoint) 
     {
-        
+        healthPoint -= attackPoint;
+        if (healthPoint <= 0)
+        {
+            SetState(deathState);
+        }
     }
 
     public void AttackCoolTime(int type)

@@ -18,7 +18,7 @@ public class RunScript : IPlayerState
     }
     public void UpdateState(PlayerScript character)
     {
-        if (character.targetEnemy == null)
+        if (character.targetEnemy == null || !character.targetEnemy.gameObject.activeSelf)
         {
             character.SetState(character.idleState);
             return;

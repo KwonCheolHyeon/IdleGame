@@ -25,6 +25,13 @@ public class IdleScript : IPlayerState
 
         if (character.targetEnemy != null)
         {
+            if (!character.targetEnemy.gameObject.activeSelf)
+            {
+                character.targetEnemy = null; 
+                FindTarget(character);
+                return;
+            }
+
             float distanceToEnemy = Vector3.Distance(character.transform.position, character.targetEnemy.position);
 
             if (distanceToEnemy <= character.attackRange)
@@ -72,15 +79,16 @@ public class IdleScript : IPlayerState
                 }
             }
 
-            character.targetEnemy = closestEnemy; // 가장 가까운 적을 타겟으로 설정
-            Debug.Log($"타겟 발견: {character.targetEnemy.name}");
-            character.SetState(character.runState);
-            return;
+            if (closestEnemy != null)
+            {
+                character.targetEnemy = closestEnemy; // 가장 가까운 적을 타겟으로 설정
+                Debug.Log($"타겟 발견: {character.targetEnemy.name}");
+                character.SetState(character.runState);
+            }
         }
         else
         {
             Debug.Log("적 없음");
-            return;
         }
     }
 }

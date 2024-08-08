@@ -4,23 +4,33 @@ using UnityEngine;
 
 public class MonsterDeathScript : IMonsterState
 {
+    private bool animationFinished = false;
     public void EnterState(EnemyScript character)
     {
-        throw new System.NotImplementedException();
+        character.animator.SetTrigger("DeathTrigger");
     }
 
     public void ExitState(EnemyScript character)
     {
-        throw new System.NotImplementedException();
+        
     }
 
     public void FixedUpdateState(EnemyScript character)
     {
-        throw new System.NotImplementedException();
+        
     }
 
     public void UpdateState(EnemyScript character)
     {
-        throw new System.NotImplementedException();
+        AnimatorStateInfo stateInfo = character.animator.GetCurrentAnimatorStateInfo(0);
+
+        if (stateInfo.IsName("4_Death") && stateInfo.normalizedTime >= 1 && !character.animator.IsInTransition(0))
+        {
+            if (!animationFinished)
+            {
+                animationFinished = true;
+                character.gameObject.SetActive(false);
+            }
+        }
     }
 }

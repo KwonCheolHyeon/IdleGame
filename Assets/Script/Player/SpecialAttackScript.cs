@@ -27,43 +27,42 @@ public class SpecialAttackScript : IPlayerState
     }
     public void UpdateState(PlayerScript character)
     {
-        // 현재 애니메이터의 상태 정보 가져오기
         AnimatorStateInfo stateInfo = character.animator.GetCurrentAnimatorStateInfo(0);
 
-        if (stateInfo.IsName("5_Skill_Normal") && stateInfo.normalizedTime >= 1 && !character.animator.IsInTransition(0))
+        // "5_Skill_Normal" 애니메이션이 진행 중일 때
+        if (stateInfo.IsName("5_Skill_Normal"))
         {
-            if (!animationFinished)
+            // 애니메이션이 끝났을 때
+            if (stateInfo.normalizedTime >= 1 && !character.animator.IsInTransition(0))
             {
-                animationFinished = true;
-                ChangeState(character);
+                if (!animationFinished)
+                {
+                    animationFinished = true;
+                    character.SetState(character.idleState);
+                }
+            }
+            // 애니메이션이 절반 진행되었을 때 적에게 데미지를 줌
+            else if (stateInfo.normalizedTime >= 0.5f && !hasAttacked && character.targetEnemy != null)
+            {
+                EnemyScript enemy = character.targetEnemy.GetComponent<EnemyScript>();
+                if (enemy != null)
+                {
+                    enemy.TakeDamage(character.attackPoint * 2); // 적에게 데미지
+                    character.canSpecialAttack = false;
+                    character.AttackCoolTime(1);
+                    hasAttacked = true;
+                }
             }
         }
-        else
+        else 
         {
-            animationFinished = false;
+            Debug.LogError("스킬 공격 에러");
+            character.SetState(character.idleState);
         }
-
-
-        // 공격이 시작된 후 한번만 공격 로직을 실행
-        if (!hasAttacked && character.targetEnemy != null)
-        {
-            // 적에게 데미지 주기
-            EnemyScript enemy = character.targetEnemy.GetComponent<EnemyScript>();
-            if (enemy != null)
-            {
-                enemy.TakeDamage(character.attackPoint * 2);//적에게 데미지
-                character.canSpecialAttack = false;
-                character.AttackCoolTime(1);
-                hasAttacked = true;
-            }
-        }
-
-        
-       
     }
 
-    private void ChangeState(PlayerScript character)
-    {
-        character.SetState(character.idleState);
-    }
+    //private void ChangeState(PlayerScript character)
+    //{
+    //    character.SetState(character.idleState);
+    //}
 }

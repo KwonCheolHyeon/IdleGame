@@ -30,10 +30,11 @@ public class EnemyScript : MonoBehaviour
         animator = GetComponent<Animator>();
         rigid = GetComponent<Rigidbody2D>();
 
+        monsterHealthPoint = 10.0f;
         runSpeed = 3.0f;
         attackTimer = 1.0f;
         canAttack = true;
-        attackPoint = 2.0f;
+        attackPoint = 1.0f;
         SetState(idleState);
     }
 
@@ -59,7 +60,16 @@ public class EnemyScript : MonoBehaviour
 
     public void TakeDamage(float attackPoint)
     {
+        monsterHealthPoint -= attackPoint;
+        if (monsterHealthPoint <= 0) 
+        {
+            SetState(deathState);
+        }
+    }
 
+    public void OnDestroy()
+    {
+        Destroy(gameObject);
     }
 
     public void AttackCoolTime(int type)
