@@ -74,10 +74,7 @@ public class IdleScript : IPlayerState
                 character.SetState(character.runState);
             }
         }
-        else
-        {
-            Debug.Log("Àû ¾øÀ½");
-        }
+
     }
 
     private void TryAttackEnemy(PlayerScript character) 
@@ -102,7 +99,7 @@ public class IdleScript : IPlayerState
     private void FlipCharacter(PlayerScript character) 
     {
         Vector3 direction = (character.targetEnemy.position - character.transform.position).normalized;
-        character.transform.position += direction * character.runSpeed * Time.deltaTime;
+        
 
         character.inputVec = new Vector2(direction.x, direction.y);
 

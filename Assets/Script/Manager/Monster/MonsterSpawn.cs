@@ -6,7 +6,8 @@ public class MonsterSpawn : MonoBehaviour
 {
     public GameObject playerObject;
     public int numberOfMonsters = 10; // 한 번에 소환할 몬스터의 개수
-    public float radius = 5f; // 플레이어로부터 몬스터를 소환할 반지름 거리
+    public float minRadius = 10f; // 최소 소환 반경
+    public float maxRadius = 15f; // 최대 소환 반경
 
     public void SettingPlayerObject()
     {
@@ -44,10 +45,10 @@ public class MonsterSpawn : MonoBehaviour
                 return;
             }
 
-            // 원형으로 몬스터 위치를 계산
-            float angle = i * Mathf.PI * 2 / numberOfMonsters;
-            Vector2 monsterPosition = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * radius;
-            Vector2 spawnPosition = playerPosition + monsterPosition;
+            // 원 범위 밖에서 랜덤한 위치 계산
+            Vector2 randomDirection = Random.insideUnitCircle.normalized;
+            float randomDistance = Random.Range(minRadius, maxRadius);
+            Vector2 spawnPosition = playerPosition + randomDirection * randomDistance;
 
             // 몬스터 위치와 활성화 설정
             monsterObject.transform.position = spawnPosition;
@@ -57,6 +58,7 @@ public class MonsterSpawn : MonoBehaviour
             EnemyScript monsterScript = monsterObject.transform.Find("UnitRoot").GetComponent<EnemyScript>();
             if (monsterScript != null)
             {
+                monsterScript.gameObject.SetActive(true);
                 monsterScript.MonsterSetting(stage);
             }
             else

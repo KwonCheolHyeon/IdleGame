@@ -4,10 +4,11 @@ using UnityEngine;
 
 public class MonsterDeathScript : IMonsterState
 {
-    private bool animationFinished = false;
+    private bool animationFinished;
     public void EnterState(EnemyScript character)
     {
         character.animator.SetTrigger("DeathTrigger");
+        animationFinished = false;
     }
 
     public void ExitState(EnemyScript character)
@@ -29,7 +30,18 @@ public class MonsterDeathScript : IMonsterState
             if (!animationFinished)
             {
                 animationFinished = true;
-                character.gameObject.transform.parent.gameObject.SetActive(false);
+
+                // 부모 오브젝트를 비활성화
+                if (character.gameObject.transform.parent != null)
+                {
+                    character.gameObject.SetActive(false);
+                    character.gameObject.transform.parent.gameObject.SetActive(false);
+                }
+                else
+                {
+                    // 부모 오브젝트가 없는 경우 자기 자신을 비활성화
+                    character.gameObject.SetActive(false);
+                }
             }
         }
     }

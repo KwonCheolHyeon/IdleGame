@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 
 public class EnemyScript : MonoBehaviour
 {
@@ -30,6 +31,11 @@ public class EnemyScript : MonoBehaviour
     public float attackRange = 1.0f; // 공격을 시작할 거리
     private bool isAttackCooldownActive = false;
 
+    private void OnEnable()
+    {
+        targetPlayer = null;
+        SetState(idleState);
+    }
     void Start()
     {
         animator = GetComponent<Animator>();
