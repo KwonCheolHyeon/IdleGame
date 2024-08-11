@@ -13,7 +13,7 @@ public class EnemyScript : MonoBehaviour
     public IMonsterState runState = new MonsterRunScript();
     public IMonsterState attackState = new MonsterAttackScript();
     public IMonsterState deathState = new MonsterDeathScript();
-    public IMonsterState bossDeathState = new MonsterDeathScript();
+    public IMonsterState bossDeathState = new BossMonsterDeath();
 
     public Rigidbody2D rigid;
     public Animator animator; // Animator 추가
@@ -75,7 +75,7 @@ public class EnemyScript : MonoBehaviour
         {
             if (isBoss)
             {
-                
+                SetState(bossDeathState);
             }
             else 
             {
@@ -121,7 +121,7 @@ public class EnemyScript : MonoBehaviour
     {
         baseMonsterAp = 5 * SetStageMonsterStat(stageCount);
         baseMonsterDp = 5 * SetStageMonsterStat(stageCount);
-        baseMonsterHp = 10 * SetStageMonsterStat(stageCount);
+        baseMonsterHp = 10 * SetStageMonsterStat(stageCount);   
 
 
         attackPoint = 2 * baseMonsterAp * stageCount;//공격력
@@ -142,8 +142,8 @@ public class EnemyScript : MonoBehaviour
 
     public void DestroyBoss()
     {
-        
-
+        GameManager.Instance.MonsterStageUp();
+        MonsterManager.Instance.bossSpawnOn = false;
         Destroy(transform.parent.gameObject);
     }
 
