@@ -24,10 +24,12 @@ public class MonsterManager : MonoBehaviour
     }
 
     public GameObject[] monsterPrefabs;
+    public GameObject[] bossMonsterPrefabs;
     public List<GameObject>[] monsterPools;
     public int maxActiveMonsters = 10;
     public float monsterSpawnTime;
     public MonsterSpawn monsterSpawnScript;
+    public bool bossSpawnOn;
     void Start()
     {
         monsterPools = new List<GameObject>[monsterPrefabs.Length];
@@ -45,6 +47,8 @@ public class MonsterManager : MonoBehaviour
         }
         monsterSpawnScript = GetComponent<MonsterSpawn>();
         monsterSpawnTime = 5.0f;
+
+        bossSpawnOn = false;
     }
 
     public GameObject Get(int index)
@@ -73,6 +77,25 @@ public class MonsterManager : MonoBehaviour
         return select;
     }
 
+    public GameObject BossGet(int index)
+    {
+        if (index < 0 || index >= bossMonsterPrefabs.Length)
+        {
+            return null;
+        }
+
+        if (bossMonsterPrefabs[index] == null)
+        {
+            return null;
+        }
+
+        GameObject select = null;
+
+        select = bossMonsterPrefabs[index];
+
+        return select;
+    }
+
     public int GetActiveMonsterCount()
     {
         int activeCount = 0;
@@ -91,11 +114,14 @@ public class MonsterManager : MonoBehaviour
 
     void Update()
     {
-        monsterSpawnTime -= Time.deltaTime;
-        if (monsterSpawnTime <= 0)
+        if(!bossSpawnOn) 
         {
-            Debug.Log("타이머 완료, 몬스터 소환 시도");
-            MonsterSpawnMonsters();
+            monsterSpawnTime -= Time.deltaTime;
+            if (monsterSpawnTime <= 0)
+            {
+                Debug.Log("타이머 완료, 몬스터 소환 시도");
+                MonsterSpawnMonsters();
+            }
         }
     }
 
@@ -118,5 +144,20 @@ public class MonsterManager : MonoBehaviour
 
         monsterSpawnScript.SpawnMonsters(monsterIndex, stageCount);
         monsterSpawnTime = 10.0f; // 타이머 초기화
+    }
+
+    public void BossSpawn() 
+    {
+        if (bossSpawnOn)
+        {
+            return;
+        }
+        else 
+        {
+            bossSpawnOn = true;
+            int stageCount = GameManager.Instance.stageCount;
+            int monsterIndex = (stageCount / 5) % monsterPrefabs.Length;
+            monsterSpawnScript.BossSpawnMonsters(monsterIndex, stageCount);
+        }
     }
 }

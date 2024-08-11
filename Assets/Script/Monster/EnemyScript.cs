@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.TextCore.Text;
@@ -12,6 +13,7 @@ public class EnemyScript : MonoBehaviour
     public IMonsterState runState = new MonsterRunScript();
     public IMonsterState attackState = new MonsterAttackScript();
     public IMonsterState deathState = new MonsterDeathScript();
+    public IMonsterState bossDeathState = new MonsterDeathScript();
 
     public Rigidbody2D rigid;
     public Animator animator; // Animator 추가
@@ -30,6 +32,7 @@ public class EnemyScript : MonoBehaviour
 
     public float attackRange = 1.0f; // 공격을 시작할 거리
     private bool isAttackCooldownActive = false;
+    private bool isBoss = false;
 
     private void OnEnable()
     {
@@ -68,9 +71,16 @@ public class EnemyScript : MonoBehaviour
     public void TakeDamage(float attackPoint)
     {
         monsterHealthPoint -= (int)(attackPoint - defensePoint);
-        if (monsterHealthPoint <= 0) 
+        if (monsterHealthPoint <= 0 ) 
         {
-            SetState(deathState);
+            if (isBoss)
+            {
+                
+            }
+            else 
+            {
+                SetState(deathState);
+            }
         }
     }
 
@@ -104,12 +114,37 @@ public class EnemyScript : MonoBehaviour
         runSpeed = 3.0f; // 걷는 속도
         canAttack = true;//일반 공격
         attackTimer = 1.5f;//공격
+        isBoss = false;
+    }
+
+    public void BossSetting(int stageCount) 
+    {
+        baseMonsterAp = 5 * SetStageMonsterStat(stageCount);
+        baseMonsterDp = 5 * SetStageMonsterStat(stageCount);
+        baseMonsterHp = 10 * SetStageMonsterStat(stageCount);
+
+
+        attackPoint = 2 * baseMonsterAp * stageCount;//공격력
+        defensePoint = 2 * baseMonsterDp * stageCount; // 방어력
+        monsterHealthPoint = 2 *baseMonsterHp * stageCount;
+
+        runSpeed = 3.0f; // 걷는 속도
+        canAttack = true;//일반 공격
+        attackTimer = 1.0f;//공격
+        isBoss = true;
     }
 
     private int SetStageMonsterStat(int statgeCount) 
     {
         int stat = (statgeCount + 4) / 5;
         return stat;
+    }
+
+    public void DestroyBoss()
+    {
+        
+
+        Destroy(transform.parent.gameObject);
     }
 
 }
