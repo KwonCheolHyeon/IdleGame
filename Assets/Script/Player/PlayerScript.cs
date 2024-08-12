@@ -7,7 +7,6 @@ using UnityEngine.TextCore.Text;
 public class PlayerScript : MonoBehaviour
 {
     public IPlayerState currentState { get; private set; }
-
     public IPlayerState idleState = new IdleScript();
     public IPlayerState runState = new RunScript();
     public IPlayerState attackState = new AttackScript();
@@ -19,34 +18,24 @@ public class PlayerScript : MonoBehaviour
     public Animator animator; // Animator 추가
     public Transform targetEnemy; // 타겟팅된 적
 
-    public float attackPoint;//공격력
-    public float defensePoint; // 방어력
-    public float healthPoint; // 체력
-    public float runSpeed; // 걷는 속도
-    public bool canSpecialAttack;// 스킬 공격
-    public float specialAttackTimer; // 스킬공격 쿨타임
-    public bool canAttack;//일반 공격
-    public float attackTimer;//공격
+    public float attackPoint { get; private set; }
+    public float defensePoint { get; private set; }
+    public float healthPoint { get; private set; }
+    public float runSpeed { get; private set; }
+    public bool canSpecialAttack { get; set; }
+    public float specialAttackTimer { get; private set; }
+    public bool canAttack { get; set; }
+    public float attackTimer { get; private set; }
+    public float attackRange { get; private set; }
 
-
-    public float attackRange = 1.0f; // 공격을 시작할 거리
     private bool isAttackCooldownActive = false;
     private bool isSpecialAttackCooldownActive = false;
-    //public bool canHit;//데미지 받는 쿨타임
-    //public float hitTimer;//데미지 쿨타임
     void Start()
     {
         animator = GetComponent<Animator>();
         rigid = GetComponent<Rigidbody2D>();
 
-        runSpeed = 3.0f;
-        specialAttackTimer = 5.0f;
-        canSpecialAttack = true;
-        attackTimer = 1.0f;
-        canAttack = true;
-        attackPoint = 20.0f;
-        healthPoint = 1000;
-
+        SettingPlayer();
         SetState(idleState);
     }
 
@@ -98,6 +87,18 @@ public class PlayerScript : MonoBehaviour
         yield return new WaitForSeconds(cooldownTime);
         onCooldownEnd();
         onCooldownComplete(); 
+    }
+
+    private void SettingPlayer() 
+    {
+        runSpeed = 3.0f;
+        specialAttackTimer = 5.0f;
+        canSpecialAttack = true;
+        attackTimer = 1.0f;
+        canAttack = true;
+        attackPoint = 20.0f;
+        healthPoint = 1000;
+        attackRange = 1.0f;
     }
 
 }

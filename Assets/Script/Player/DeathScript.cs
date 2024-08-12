@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class DeathScript : IPlayerState
 {
-    private bool animationFinished = false;
+    private bool bAnimationFinished = false;
     public void EnterState(PlayerScript character)
     {
         character.animator.SetTrigger("DeathTrigger");
@@ -26,9 +26,9 @@ public class DeathScript : IPlayerState
 
         if (stateInfo.IsName("4_Death") && stateInfo.normalizedTime >= 1 && !character.animator.IsInTransition(0))
         {
-            if (!animationFinished)
+            if (!bAnimationFinished)
             {
-                animationFinished = true;
+                bAnimationFinished = true;
 
                 character.gameObject.SetActive(false);
             }

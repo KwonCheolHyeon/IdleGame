@@ -5,14 +5,14 @@ using UnityEngine.TextCore.Text;
 
 public class AttackScript : IPlayerState
 {
-    private bool hasAttacked; // 한번만 공격하도록 하기 위한 플래그
-    private bool animationFinished = false;
+    private bool bHasAttacked; // 한번만 공격하도록 하기 위한 플래그
+    private bool bAnimationFinished = false;
     public void EnterState(PlayerScript character)
     {
         Debug.Log("공격 ON");
         character.animator.SetBool("IsAttack", true);
-        hasAttacked = false;
-        animationFinished = false;
+        bHasAttacked = false;
+        bAnimationFinished = false;
     }
 
     public void ExitState(PlayerScript character)
@@ -37,14 +37,14 @@ public class AttackScript : IPlayerState
             // 애니메이션이 끝났을 때
             if (stateInfo.normalizedTime >= 1 && !character.animator.IsInTransition(0))
             {
-                if (!animationFinished)
+                if (!bAnimationFinished)
                 {
-                    animationFinished = true;
+                    bAnimationFinished = true;
                     character.SetState(character.idleState);
                 }
             }
             // 애니메이션이 절반 진행되었을 때
-            else if (stateInfo.normalizedTime >= 0.5f && !hasAttacked)
+            else if (stateInfo.normalizedTime >= 0.5f && !bHasAttacked)
             {
                 if (character.targetEnemy != null && character.targetEnemy.gameObject.activeSelf)
                 {
@@ -56,7 +56,7 @@ public class AttackScript : IPlayerState
                         enemy.TakeDamage(character.attackPoint); // 적에게 데미지
                         character.canAttack = false;
                         character.AttackCoolTime(0); // 쿨타임 설정
-                        hasAttacked = true;
+                        bHasAttacked = true;
                     }
                 }
             }

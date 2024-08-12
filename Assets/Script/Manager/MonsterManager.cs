@@ -29,7 +29,7 @@ public class MonsterManager : MonoBehaviour
     public int maxActiveMonsters = 10;
     public float monsterSpawnTime;
     public MonsterSpawn monsterSpawnScript;
-    public bool bossSpawnOn;
+    public bool bBossSpawnOn;
     void Start()
     {
         monsterPools = new List<GameObject>[monsterPrefabs.Length];
@@ -48,7 +48,7 @@ public class MonsterManager : MonoBehaviour
         monsterSpawnScript = GetComponent<MonsterSpawn>();
         monsterSpawnTime = 5.0f;
 
-        bossSpawnOn = false;
+        bBossSpawnOn = false;
     }
 
     public GameObject Get(int index)
@@ -112,7 +112,7 @@ public class MonsterManager : MonoBehaviour
 
     void Update()
     {
-        if(!bossSpawnOn) 
+        if(!bBossSpawnOn) 
         {
             monsterSpawnTime -= Time.deltaTime;
             if (monsterSpawnTime <= 0)
@@ -147,7 +147,7 @@ public class MonsterManager : MonoBehaviour
     public void BossSpawn() 
     {
 
-        if (bossSpawnOn)
+        if (bBossSpawnOn)
         {
             Debug.Log("보스 스폰실패");
             return;
@@ -155,7 +155,7 @@ public class MonsterManager : MonoBehaviour
         else 
         {
             Debug.Log("보스 스폰 성공");
-            bossSpawnOn = true;
+            bBossSpawnOn = true;
             int stageCount = GameManager.Instance.stageCount;
             int monsterIndex = (stageCount / 5) % monsterPrefabs.Length;
             monsterSpawnScript.BossSpawnMonsters(monsterIndex, stageCount);

@@ -28,7 +28,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public PlayerScript player;
+    public PlayerScript player { get; private set; }
     public int stageCount { get; private set; }
     public int money { get; private set; }
 
@@ -88,7 +88,7 @@ public class GameManager : MonoBehaviour
         
     }
 
-    public void earnMoney(int earn) 
+    public void EarnMoney(int earn) 
     {
         money += earn;
         moneyText.text = "Money : " + money;

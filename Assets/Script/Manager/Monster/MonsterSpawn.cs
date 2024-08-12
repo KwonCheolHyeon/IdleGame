@@ -59,7 +59,7 @@ public class MonsterSpawn : MonoBehaviour
             if (monsterScript != null)
             {
                 monsterScript.gameObject.SetActive(true);
-                monsterScript.MonsterSetting(stage);
+                monsterScript.ConfigureMonster(stage);
             }
             else
             {
@@ -105,7 +105,7 @@ public class MonsterSpawn : MonoBehaviour
             if (monsterScript != null)
             {
                 monsterScript.gameObject.SetActive(true);
-                monsterScript.BossSetting(stage);
+                monsterScript.ConfigureMonster(stage, true);
             }
             else
             {

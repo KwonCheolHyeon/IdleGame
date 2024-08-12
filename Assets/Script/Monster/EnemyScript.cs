@@ -8,7 +8,6 @@ using UnityEngine.TextCore.Text;
 public class EnemyScript : MonoBehaviour
 {
     public IMonsterState currentState { get; private set; }
-
     public IMonsterState idleState = new MonsterIdleScript();
     public IMonsterState runState = new MonsterRunScript();
     public IMonsterState attackState = new MonsterAttackScript();
@@ -19,18 +18,17 @@ public class EnemyScript : MonoBehaviour
     public Animator animator; // Animator 추가
     public Transform targetPlayer; // 타겟팅된 적
 
-    public float attackPoint;//공격력
-    public float defensePoint; // 방어력
-    public int monsterHealthPoint;
-    public float baseMonsterAp;
-    public float baseMonsterDp;
-    public int baseMonsterHp;
-    public float runSpeed; // 걷는 속도
-    public bool canAttack;//일반 공격
-    public float attackTimer;//공격
+    public float attackPoint { get; private set; }
+    public float defensePoint { get; private set; }
+    public int monsterHealthPoint { get; private set; }
+    public float baseMonsterAp { get; private set; }
+    public float baseMonsterDp { get; private set; }
+    public int baseMonsterHp { get; private set; }
+    public float runSpeed { get; private set; }
+    public bool canAttack { get; set; }
+    public float attackTimer { get; private set; }
+    public float attackRange { get; private set; }
 
-
-    public float attackRange = 1.0f; // 공격을 시작할 거리
     private bool isAttackCooldownActive = false;
     private bool isBoss = false;
     private int mStage;
@@ -70,23 +68,16 @@ public class EnemyScript : MonoBehaviour
 
     public void TakeDamage(float attackPoint)
     {
-        monsterHealthPoint -= (int)(attackPoint - defensePoint);
-        if (monsterHealthPoint <= 0 ) 
+        monsterHealthPoint -= Mathf.Max(0, (int)(attackPoint - defensePoint));
+        if (monsterHealthPoint <= 0)
         {
-            if (isBoss)
-            {
-                SetState(bossDeathState);
-            }
-            else 
-            {
-                SetState(deathState);
-            }
+            SetState(isBoss ? bossDeathState : deathState);
         }
     }
 
-    public void AttackCoolTime(int type)
+    public void AttackCoolTime()
     {
-        if (type == 0 && !isAttackCooldownActive)
+        if (!isAttackCooldownActive)
         {
             StartCoroutine(CooldownCoroutine(attackTimer, () => canAttack = true, () => isAttackCooldownActive = false));
         }
@@ -100,57 +91,37 @@ public class EnemyScript : MonoBehaviour
         onCooldownComplete();
     }
 
-    public void MonsterSetting(int stageCount)
+    public void ConfigureMonster(int stage, bool boss = false)
     {
-        baseMonsterAp = 5 * SetStageMonsterStat(stageCount);
-        baseMonsterDp = 5 * SetStageMonsterStat(stageCount);
-        baseMonsterHp = 10 * SetStageMonsterStat(stageCount);
+        int statMultiplier = (stage + 4) / 5;
 
+        float baseAttack = 5 * statMultiplier;
+        float baseDefense = 5 * statMultiplier;
+        int baseHealth = 10 * statMultiplier;
 
-        attackPoint = baseMonsterAp * stageCount;//공격력
-        defensePoint = baseMonsterDp * stageCount; // 방어력
-        monsterHealthPoint = baseMonsterHp * stageCount;
-        mStage = stageCount;
-        runSpeed = 3.0f; // 걷는 속도
-        canAttack = true;//일반 공격
-        attackTimer = 1.5f;//공격
-        isBoss = false;
-    }
+        attackPoint = (boss ? 2 : 1) * baseAttack * stage;
+        defensePoint = (boss ? 2 : 1) * baseDefense * stage;
+        monsterHealthPoint = (boss ? 2 : 1) * baseHealth * stage;
 
-    public void BossSetting(int stageCount) 
-    {
-        baseMonsterAp = 5 * SetStageMonsterStat(stageCount);
-        baseMonsterDp = 5 * SetStageMonsterStat(stageCount);
-        baseMonsterHp = 10 * SetStageMonsterStat(stageCount);   
-
-
-        attackPoint = 2 * baseMonsterAp * stageCount;//공격력
-        defensePoint = 2 * baseMonsterDp * stageCount; // 방어력
-        monsterHealthPoint = 2 *baseMonsterHp * stageCount;
-        mStage = stageCount;    
-        runSpeed = 3.0f; // 걷는 속도
-        canAttack = true;//일반 공격
-        attackTimer = 1.0f;//공격
-        isBoss = true;
-    }
-
-    private int SetStageMonsterStat(int statgeCount) 
-    {
-        int stat = (statgeCount + 4) / 5;
-        return stat;
+        runSpeed = 3.0f;
+        canAttack = true;
+        attackTimer = boss ? 1.0f : 1.5f;
+        attackRange = 0.8f;
+        isBoss = boss;
+        mStage = stage;
     }
 
     public void DestroyBoss()
     {
         GameManager.Instance.MonsterStageUp();
-        MonsterManager.Instance.bossSpawnOn = false;
+        MonsterManager.Instance.bBossSpawnOn = false;
         Destroy(transform.parent.gameObject);
     }
 
     public void DeathMonster() 
     {
-        int money = 100 * (1 + mStage);
-        GameManager.Instance.earnMoney(money);
+        int money = 100 + (mStage);
+        GameManager.Instance.EarnMoney(money);
     }
 
 }

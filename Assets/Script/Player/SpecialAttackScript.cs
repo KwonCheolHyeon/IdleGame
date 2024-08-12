@@ -4,15 +4,15 @@ using UnityEngine;
 
 public class SpecialAttackScript : IPlayerState
 {
-    private bool hasAttacked;
-    private bool animationFinished;
+    private bool bHasAttacked;
+    private bool bAnimationFinished;
 
     public void EnterState(PlayerScript character)
     {
         Debug.Log("특수공격 ON");
         character.animator.SetBool("IsSkill", true);
-        hasAttacked = false;
-        animationFinished = false ;
+        bHasAttacked = false;
+        bAnimationFinished = false ;
     }
 
     public void ExitState(PlayerScript character)
@@ -34,13 +34,13 @@ public class SpecialAttackScript : IPlayerState
             // 애니메이션이 끝났을 때
             if (stateInfo.normalizedTime >= 1 && !character.animator.IsInTransition(0))
             {
-                if (!animationFinished)
+                if (!bAnimationFinished)
                 {
-                    animationFinished = true;
+                    bAnimationFinished = true;
                     character.SetState(character.idleState);
                 }
             }
-            else if (stateInfo.normalizedTime >= 0.5f && !hasAttacked)
+            else if (stateInfo.normalizedTime >= 0.5f && !bHasAttacked)
             {
                 if (character.targetEnemy != null && character.targetEnemy.gameObject.activeSelf)
                 {
@@ -51,7 +51,7 @@ public class SpecialAttackScript : IPlayerState
                         enemy.TakeDamage(character.attackPoint * 2); // 적에게 데미지
                         character.canSpecialAttack = false;
                         character.AttackCoolTime(1);
-                        hasAttacked = true;
+                        bHasAttacked = true;
                     }
                 }
             }

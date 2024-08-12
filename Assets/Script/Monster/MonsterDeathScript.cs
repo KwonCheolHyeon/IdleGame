@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class MonsterDeathScript : IMonsterState
 {
-    private bool animationFinished;
+    private bool mAnimationFinished;
     public void EnterState(EnemyScript character)
     {
         character.animator.SetTrigger("DeathTrigger");
-        animationFinished = false;
+        mAnimationFinished = false;
     }
 
     public void ExitState(EnemyScript character)
@@ -27,9 +27,9 @@ public class MonsterDeathScript : IMonsterState
 
         if (stateInfo.IsName("4_Death") && stateInfo.normalizedTime >= 1 && !character.animator.IsInTransition(0))
         {
-            if (!animationFinished)
+            if (!mAnimationFinished)
             {
-                animationFinished = true;
+                mAnimationFinished = true;
 
                 // 부모 오브젝트를 비활성화
                 if (character.gameObject.transform.parent != null)

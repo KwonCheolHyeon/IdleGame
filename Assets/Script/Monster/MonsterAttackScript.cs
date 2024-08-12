@@ -52,7 +52,7 @@ public class MonsterAttackScript : IMonsterState
             {
                 player.TakeDamage(character.attackPoint);//적에게 데미지
                 character.canAttack = false;
-                character.AttackCoolTime(0);
+                character.AttackCoolTime();
                 hasAttacked = true;
             }
         }
