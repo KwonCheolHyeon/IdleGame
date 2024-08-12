@@ -90,9 +90,7 @@ public class MonsterManager : MonoBehaviour
         }
 
         GameObject select = null;
-
-        select = bossMonsterPrefabs[index];
-
+        select = Instantiate(bossMonsterPrefabs[index], transform);
         return select;
     }
 
@@ -148,12 +146,15 @@ public class MonsterManager : MonoBehaviour
 
     public void BossSpawn() 
     {
+
         if (bossSpawnOn)
         {
+            Debug.Log("보스 스폰실패");
             return;
         }
         else 
         {
+            Debug.Log("보스 스폰 성공");
             bossSpawnOn = true;
             int stageCount = GameManager.Instance.stageCount;
             int monsterIndex = (stageCount / 5) % monsterPrefabs.Length;

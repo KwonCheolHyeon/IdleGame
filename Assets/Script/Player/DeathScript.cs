@@ -29,6 +29,7 @@ public class DeathScript : IPlayerState
             if (!animationFinished)
             {
                 animationFinished = true;
+
                 character.gameObject.SetActive(false);
             }
         }

@@ -33,7 +33,7 @@ public class EnemyScript : MonoBehaviour
     public float attackRange = 1.0f; // 공격을 시작할 거리
     private bool isAttackCooldownActive = false;
     private bool isBoss = false;
-
+    private int mStage;
     private void OnEnable()
     {
         targetPlayer = null;
@@ -110,7 +110,7 @@ public class EnemyScript : MonoBehaviour
         attackPoint = baseMonsterAp * stageCount;//공격력
         defensePoint = baseMonsterDp * stageCount; // 방어력
         monsterHealthPoint = baseMonsterHp * stageCount;
-
+        mStage = stageCount;
         runSpeed = 3.0f; // 걷는 속도
         canAttack = true;//일반 공격
         attackTimer = 1.5f;//공격
@@ -127,7 +127,7 @@ public class EnemyScript : MonoBehaviour
         attackPoint = 2 * baseMonsterAp * stageCount;//공격력
         defensePoint = 2 * baseMonsterDp * stageCount; // 방어력
         monsterHealthPoint = 2 *baseMonsterHp * stageCount;
-
+        mStage = stageCount;    
         runSpeed = 3.0f; // 걷는 속도
         canAttack = true;//일반 공격
         attackTimer = 1.0f;//공격
@@ -145,6 +145,12 @@ public class EnemyScript : MonoBehaviour
         GameManager.Instance.MonsterStageUp();
         MonsterManager.Instance.bossSpawnOn = false;
         Destroy(transform.parent.gameObject);
+    }
+
+    public void DeathMonster() 
+    {
+        int money = 100 * (1 + mStage);
+        GameManager.Instance.earnMoney(money);
     }
 
 }

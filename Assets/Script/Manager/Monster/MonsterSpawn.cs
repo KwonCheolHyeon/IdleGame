@@ -80,7 +80,7 @@ public class MonsterSpawn : MonoBehaviour
 
         Vector2 playerPosition = playerObject.transform.position;
 
-        for (int i = 0; i < numberOfMonsters; i++)
+        for (int i = 0; i < 1; i++)
         {
             // MonsterManager에서 몬스터를 가져오기
             GameObject monsterObject = MonsterManager.Instance.BossGet(monsterType);

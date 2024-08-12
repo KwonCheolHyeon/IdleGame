@@ -255,6 +255,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 0}
+  stageText: {fileID: 85936346}
+  moneyText: {fileID: 1341348079}
 --- !u!4 &23761152
 Transform:
   m_ObjectHideFlags: 0
@@ -6208,7 +6210,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1126087694}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1118258935}
+        m_TargetAssemblyTypeName: MonsterManager, Assembly-CSharp
+        m_MethodName: BossSpawn
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1126087694
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10917,7 +10931,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Money : 200000000'
+  m_text: 'Money : 0'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 9a2157e1f9c4c4d38841fbb92558f587, type: 2}
   m_sharedMaterial: {fileID: -6360588970910393389, guid: 9a2157e1f9c4c4d38841fbb92558f587, type: 2}

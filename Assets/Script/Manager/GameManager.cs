@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -29,7 +30,10 @@ public class GameManager : MonoBehaviour
 
     public PlayerScript player;
     public int stageCount { get; private set; }
+    public int money { get; private set; }
 
+    public TextMeshProUGUI stageText;
+    public TextMeshProUGUI moneyText;
     private void Start()
     {
         // Resources에서 프리팹을 로드
@@ -65,5 +69,28 @@ public class GameManager : MonoBehaviour
     public void MonsterStageUp() 
     {
         stageCount += 1;
+        stageText.text = "Stage : " + stageCount;
+    }
+
+    public bool SpendMoney(int useMoney) 
+    {
+        money -= useMoney;
+        if (money < 0)
+        {
+            money += useMoney;
+            return false;
+        }
+        else 
+        {
+            moneyText.text = "Money : " + money;
+            return true;
+        }
+        
+    }
+
+    public void earnMoney(int earn) 
+    {
+        money += earn;
+        moneyText.text = "Money : " + money;
     }
 }
