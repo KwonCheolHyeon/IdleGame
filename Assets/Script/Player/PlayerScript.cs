@@ -101,4 +101,9 @@ public class PlayerScript : MonoBehaviour
         attackRange = 1.0f;
     }
 
+    public void PlayerLevelUp(int type) 
+    {
+    
+    }
+
 }
