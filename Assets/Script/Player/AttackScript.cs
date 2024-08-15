@@ -28,44 +28,62 @@ public class AttackScript : IPlayerState
 
     public void UpdateState(PlayerScript character)
     {
-        // 현재 애니메이터의 상태 정보 가져오기
         AnimatorStateInfo stateInfo = character.animator.GetCurrentAnimatorStateInfo(0);
 
-        // "2_Attack_Normal" 애니메이션이 진행 중일 때
-        if (stateInfo.IsName("2_Attack_Normal"))
+        if (!IsInAttackState(stateInfo))
         {
-            // 애니메이션이 끝났을 때
-            if (stateInfo.normalizedTime >= 1 && !character.animator.IsInTransition(0))
-            {
-                if (!bAnimationFinished)
-                {
-                    bAnimationFinished = true;
-                    character.SetState(character.idleState);
-                }
-            }
-            // 애니메이션이 절반 진행되었을 때
-            else if (stateInfo.normalizedTime >= 0.5f && !bHasAttacked)
-            {
-                if (character.targetEnemy != null && character.targetEnemy.gameObject.activeSelf)
-                {
-                    Debug.Log("공격 성공");
-                    // 적에게 데미지 주기
-                    EnemyScript enemy = character.targetEnemy.GetComponent<EnemyScript>();
-                    if (enemy != null)
-                    {
-                        enemy.TakeDamage(character.attackPoint); // 적에게 데미지
-                        character.canAttack = false;
-                        character.AttackCoolTime(0); // 쿨타임 설정
-                        bHasAttacked = true;
-                    }
-                }
-            }
+            Debug.LogError("공격 상태 에러");
+            character.SetState(character.idleState);
+            return;
         }
-        else
+
+        if (IsAnimationFinished(stateInfo, character))
         {
-            Debug.LogError("일반 공격 에러");
+            HandleAnimationFinished(character);
+        }
+        else if (ShouldAttack(stateInfo))
+        {
+            PerformAttack(character);
+        }
+    }
+
+    private bool IsInAttackState(AnimatorStateInfo stateInfo)
+    {
+        return stateInfo.IsName("2_Attack_Normal");
+    }
+
+    private bool IsAnimationFinished(AnimatorStateInfo stateInfo, PlayerScript character)
+    {
+        return stateInfo.normalizedTime >= 1 && !character.animator.IsInTransition(0);
+    }
+
+    private void HandleAnimationFinished(PlayerScript character)
+    {
+        if (!bAnimationFinished)
+        {
+            bAnimationFinished = true;
             character.SetState(character.idleState);
         }
     }
 
+    private bool ShouldAttack(AnimatorStateInfo stateInfo)
+    {
+        return stateInfo.normalizedTime >= 0.5f && !bHasAttacked;
+    }
+
+    private void PerformAttack(PlayerScript character)
+    {
+        if (character.targetEnemy != null && character.targetEnemy.gameObject.activeSelf)
+        {
+            Debug.Log("공격 성공");
+            MonsterScript enemy = character.targetEnemy.GetComponent<MonsterScript>();
+            if (enemy != null)
+            {
+                enemy.TakeDamage(character.attackPoint);
+                character.canAttack = false;
+                character.AttackCoolTime(0);
+                bHasAttacked = true;
+            }
+        }
+    }
 }

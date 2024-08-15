@@ -29,37 +29,61 @@ public class SpecialAttackScript : IPlayerState
     {
         AnimatorStateInfo stateInfo = character.animator.GetCurrentAnimatorStateInfo(0);
 
-        if (stateInfo.IsName("5_Skill_Normal"))
+        if (!IsInSpecialAttackState(stateInfo))
         {
-            // 애니메이션이 끝났을 때
-            if (stateInfo.normalizedTime >= 1 && !character.animator.IsInTransition(0))
+            Debug.LogError("특수공격 상태 에러");
+            character.SetState(character.idleState);
+            return;
+        }
+
+        if (IsAnimationFinished(stateInfo, character))
+        {
+            HandleAnimationFinished(character);
+        }
+        else if (ShouldPerformSpecialAttack(stateInfo))
+        {
+            PerformSpecialAttack(character);
+        }
+    }
+
+    private bool IsInSpecialAttackState(AnimatorStateInfo stateInfo)
+    {
+        return stateInfo.IsName("5_Skill_Normal");
+    }
+
+    private bool IsAnimationFinished(AnimatorStateInfo stateInfo, PlayerScript character)
+    {
+        return stateInfo.normalizedTime >= 1 && !character.animator.IsInTransition(0);
+    }
+
+    private void HandleAnimationFinished(PlayerScript character)
+    {
+        if (!bAnimationFinished)
+        {
+            bAnimationFinished = true;
+            character.SetState(character.idleState);
+        }
+    }
+
+    private bool ShouldPerformSpecialAttack(AnimatorStateInfo stateInfo)
+    {
+        return stateInfo.normalizedTime >= 0.5f && !bHasAttacked;
+    }
+
+    private void PerformSpecialAttack(PlayerScript character)
+    {
+        if (character.targetEnemy != null && character.targetEnemy.gameObject.activeSelf)
+        {
+            Debug.Log("스킬 공격 성공");
+            MonsterScript enemy = character.targetEnemy.GetComponent<MonsterScript>();
+            if (enemy != null)
             {
-                if (!bAnimationFinished)
-                {
-                    bAnimationFinished = true;
-                    character.SetState(character.idleState);
-                }
-            }
-            else if (stateInfo.normalizedTime >= 0.5f && !bHasAttacked)
-            {
-                if (character.targetEnemy != null && character.targetEnemy.gameObject.activeSelf)
-                {
-                    Debug.Log("스킬 공격 성공");
-                    EnemyScript enemy = character.targetEnemy.GetComponent<EnemyScript>();
-                    if (enemy != null)
-                    {
-                        enemy.TakeDamage(character.attackPoint * 2); // 적에게 데미지
-                        character.canSpecialAttack = false;
-                        character.AttackCoolTime(1);
-                        bHasAttacked = true;
-                    }
-                }
+                enemy.TakeDamage(character.attackPoint * 2); // 적에게 2배 데미지
+                character.canSpecialAttack = false;
+                character.AttackCoolTime(1); // 쿨타임 설정
+                bHasAttacked = true;
             }
         }
     }
 
-    //private void ChangeState(PlayerScript character)
-    //{
-    //    character.SetState(character.idleState);
-    //}
 }

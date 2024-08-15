@@ -12,8 +12,8 @@ public interface IPlayerState
 
 public interface IMonsterState
 {
-    void EnterState(EnemyScript character);
-    void UpdateState(EnemyScript character);
-    void FixedUpdateState(EnemyScript character);
-    void ExitState(EnemyScript character);
+    void EnterState(MonsterScript character);
+    void UpdateState(MonsterScript character);
+    void FixedUpdateState(MonsterScript character);
+    void ExitState(MonsterScript character);
 }

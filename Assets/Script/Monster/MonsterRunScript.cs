@@ -4,22 +4,22 @@ using UnityEngine;
 
 public class MonsterRunScript : IMonsterState
 {
-    public void EnterState(EnemyScript character)
+    public void EnterState(MonsterScript character)
     {
         character.animator.SetBool("IsRun", true);
     }
 
-    public void ExitState(EnemyScript character)
+    public void ExitState(MonsterScript character)
     {
         character.animator.SetBool("IsRun", false);
     }
 
-    public void FixedUpdateState(EnemyScript character)
+    public void FixedUpdateState(MonsterScript character)
     {
         
     }
 
-    public void UpdateState(EnemyScript character)
+    public void UpdateState(MonsterScript character)
     {
         if (character.targetPlayer == null)
         {

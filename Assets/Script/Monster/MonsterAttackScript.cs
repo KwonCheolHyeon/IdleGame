@@ -1,64 +1,91 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 
 public class MonsterAttackScript : IMonsterState
 {
-    private bool hasAttacked; // 한번만 공격하도록 하기 위한 플래그
-    private bool animationFinished = false;
-    public void EnterState(EnemyScript character)
+    private bool bHasAttacked;
+    private bool bAnimationFinished;
+
+    public void EnterState(MonsterScript character)
     {
         Debug.Log("공격 ON");
         character.animator.SetBool("IsAttack", true);
-        hasAttacked = false; // 공격 상태에 들어갈 때 플래그 초기화
+        bHasAttacked = false;
+        bAnimationFinished = false;
     }
 
-    public void ExitState(EnemyScript character)
+    public void ExitState(MonsterScript character)
     {
-        Debug.Log("공격 off");
+        Debug.Log("공격 OFF");
         character.animator.SetBool("IsAttack", false);
     }
 
-    public void FixedUpdateState(EnemyScript character)
+    public void FixedUpdateState(MonsterScript character)
     {
-        
+        // 필요 시 물리 관련 업데이트 코드 추가
     }
 
-    public void UpdateState(EnemyScript character)
+    public void UpdateState(MonsterScript character)
     {
-        // 현재 애니메이터의 상태 정보 가져오기
         AnimatorStateInfo stateInfo = character.animator.GetCurrentAnimatorStateInfo(0);
 
-        if (stateInfo.IsName("2_Attack_Normal") && stateInfo.normalizedTime >= 1 && !character.animator.IsInTransition(0))
+        if (!IsInAttackState(stateInfo))
         {
-            if (!animationFinished)
-            {
-                animationFinished = true;
-                ChangeState(character);
-            }
-        }
-        else
-        {
-            animationFinished = false;
+            bAnimationFinished = false;
+            return;
         }
 
-
-        // 공격이 시작된 후 한번만 공격 로직을 실행
-        if (!hasAttacked && character.targetPlayer != null)
+        if (IsAnimationFinished(stateInfo, character))
         {
-            // 적에게 데미지 주기
-            PlayerScript player = character.targetPlayer.GetComponent<PlayerScript>();
-            if (player != null)
-            {
-                player.TakeDamage(character.attackPoint);//적에게 데미지
-                character.canAttack = false;
-                character.AttackCoolTime();
-                hasAttacked = true;
-            }
+            HandleAnimationFinished(character);
+        }
+
+        if (ShouldAttack(character))
+        {
+            PerformAttack(character);
         }
     }
 
-    private void ChangeState(EnemyScript character)
+    private bool IsInAttackState(AnimatorStateInfo stateInfo)
+    {
+        return stateInfo.IsName("2_Attack_Normal");
+    }
+
+    private bool IsAnimationFinished(AnimatorStateInfo stateInfo, MonsterScript character)
+    {
+        return stateInfo.normalizedTime >= 1 && !character.animator.IsInTransition(0);
+    }
+
+    private void HandleAnimationFinished(MonsterScript character)
+    {
+        if (!bAnimationFinished)
+        {
+            bAnimationFinished = true;
+            ChangeState(character);
+        }
+    }
+
+    private bool ShouldAttack(MonsterScript character)
+    {
+        return !bHasAttacked && character.targetPlayer != null;
+    }
+
+    private void PerformAttack(MonsterScript character)
+    {
+        PlayerScript player = character.targetPlayer.GetComponent<PlayerScript>();
+        if (player != null)
+        {
+            Debug.Log("공격 성공");
+            player.TakeDamage(character.attackPoint);
+            character.canAttack = false;
+            character.AttackCoolTime();
+            bHasAttacked = true;
+        }
+    }
+
+    private void ChangeState(MonsterScript character)
     {
         character.SetState(character.idleState);
     }

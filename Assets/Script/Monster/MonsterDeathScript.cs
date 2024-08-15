@@ -5,23 +5,23 @@ using UnityEngine;
 public class MonsterDeathScript : IMonsterState
 {
     private bool mAnimationFinished;
-    public void EnterState(EnemyScript character)
+    public void EnterState(MonsterScript character)
     {
         character.animator.SetTrigger("DeathTrigger");
         mAnimationFinished = false;
     }
 
-    public void ExitState(EnemyScript character)
+    public void ExitState(MonsterScript character)
     {
         
     }
 
-    public void FixedUpdateState(EnemyScript character)
+    public void FixedUpdateState(MonsterScript character)
     {
         
     }
 
-    public void UpdateState(EnemyScript character)
+    public void UpdateState(MonsterScript character)
     {
         AnimatorStateInfo stateInfo = character.animator.GetCurrentAnimatorStateInfo(0);
 

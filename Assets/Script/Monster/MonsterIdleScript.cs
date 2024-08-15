@@ -4,22 +4,22 @@ using UnityEngine;
 
 public class MonsterIdleScript : IMonsterState
 {
-    public void EnterState(EnemyScript character)
+    public void EnterState(MonsterScript character)
     {
        
     }
 
-    public void ExitState(EnemyScript character)
+    public void ExitState(MonsterScript character)
     {
         
     }
 
-    public void FixedUpdateState(EnemyScript character)
+    public void FixedUpdateState(MonsterScript character)
     {
 
     }
 
-    public void UpdateState(EnemyScript character)
+    public void UpdateState(MonsterScript character)
     {
 
         if (character.targetPlayer != null)
@@ -41,7 +41,7 @@ public class MonsterIdleScript : IMonsterState
         }
     }
 
-    public void FindPlayer(EnemyScript character)
+    public void FindPlayer(MonsterScript character)
     {
         // targetEnemy가 이미 존재하면 FindTarget을 실행하지 않도록 함
         if (character.targetPlayer != null)

@@ -55,7 +55,7 @@ public class MonsterSpawn : MonoBehaviour
             monsterObject.SetActive(true);
 
             // 몬스터 스크립트 설정
-            EnemyScript monsterScript = monsterObject.transform.Find("UnitRoot").GetComponent<EnemyScript>();
+            MonsterScript monsterScript = monsterObject.transform.Find("UnitRoot").GetComponent<MonsterScript>();
             if (monsterScript != null)
             {
                 monsterScript.gameObject.SetActive(true);
@@ -101,7 +101,7 @@ public class MonsterSpawn : MonoBehaviour
             monsterObject.SetActive(true);
 
             // 몬스터 스크립트 설정
-            EnemyScript monsterScript = monsterObject.transform.Find("UnitRoot").GetComponent<EnemyScript>();
+            MonsterScript monsterScript = monsterObject.transform.Find("UnitRoot").GetComponent<MonsterScript>();
             if (monsterScript != null)
             {
                 monsterScript.gameObject.SetActive(true);

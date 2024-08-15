@@ -11,7 +11,6 @@ public class GameManager : MonoBehaviour
     {
         get
         {
-            // 인스턴스가 존재하지 않는다면 새로 생성
             if (instance == null)
             {
                 instance = FindObjectOfType<GameManager>();
@@ -20,7 +19,6 @@ public class GameManager : MonoBehaviour
                     GameObject singletonObject = new GameObject();
                     instance = singletonObject.AddComponent<GameManager>();
 
-                    // 수동으로 초기화 메서드 호출
                     instance.Start();
                 }
             }
@@ -54,12 +52,12 @@ public class GameManager : MonoBehaviour
             }
             else
             {
-                Debug.LogError("UnitRoot 자식 오브젝트를 찾을 수 없습니다.");
+                Debug.LogError("UnitRoot 자식 오브젝트를 찾을 수 없다");
             }
         }
         else
         {
-            Debug.LogError("GameManager: playerPrefab이 없습니다.");
+            Debug.LogError("GameManager: playerPrefab이 없다");
         }
 
 

@@ -10,7 +10,6 @@ public class ShopManager : MonoBehaviour
     {
         get
         {
-            // 인스턴스가 존재하지 않는다면 새로 생성
             if (instance == null)
             {
                 instance = FindObjectOfType<ShopManager>();

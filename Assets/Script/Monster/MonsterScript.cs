@@ -5,7 +5,7 @@ using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.TextCore.Text;
 
-public class EnemyScript : MonoBehaviour
+public class MonsterScript : MonoBehaviour
 {
     public IMonsterState currentState { get; private set; }
     public IMonsterState idleState = new MonsterIdleScript();
