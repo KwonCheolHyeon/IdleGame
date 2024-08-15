@@ -20,7 +20,8 @@ public class PlayerScript : MonoBehaviour
 
     public float attackPoint { get; private set; }
     public float defensePoint { get; private set; }
-    public float healthPoint { get; private set; }
+    public int maxHealthPoint { get; private set; }
+    public int nowHealthPoint { get; private set; }
     public float runSpeed { get; private set; }
     public bool canSpecialAttack { get; set; }
     public float specialAttackTimer { get; private set; }
@@ -60,10 +61,10 @@ public class PlayerScript : MonoBehaviour
         currentState.EnterState(this);
     }
 
-    public void TakeDamage(float attackPoint) 
+    public void TakeDamage(float damage) 
     {
-        healthPoint -= attackPoint;
-        if (healthPoint <= 0)
+        nowHealthPoint -= (int)Mathf.Max(0, damage - defensePoint); // 방어력 적용
+        if (nowHealthPoint <= 0)
         {
             SetState(deathState);
         }
@@ -75,7 +76,7 @@ public class PlayerScript : MonoBehaviour
         {
             StartCoroutine(CooldownCoroutine(attackTimer, () => canAttack = true, () => isAttackCooldownActive = false));
         }
-        else if (type == 1 && !isSpecialAttackCooldownActive) 
+        else if (type == 1 && !isSpecialAttackCooldownActive)
         {
             StartCoroutine(CooldownCoroutine(specialAttackTimer, () => canSpecialAttack = true, () => isSpecialAttackCooldownActive = false));
         }
@@ -83,10 +84,9 @@ public class PlayerScript : MonoBehaviour
 
     private IEnumerator CooldownCoroutine(float cooldownTime, System.Action onCooldownEnd, System.Action onCooldownComplete)
     {
-        onCooldownComplete(); 
+        onCooldownComplete();
         yield return new WaitForSeconds(cooldownTime);
         onCooldownEnd();
-        onCooldownComplete(); 
     }
 
     private void SettingPlayer() 
@@ -97,13 +97,33 @@ public class PlayerScript : MonoBehaviour
         attackTimer = 1.0f;
         canAttack = true;
         attackPoint = 20.0f;
-        healthPoint = 1000;
+        defensePoint = 5.0f; // 기본 방어력 설정
+        maxHealthPoint = 1000;
+        nowHealthPoint = maxHealthPoint;
         attackRange = 1.0f;
     }
 
     public void PlayerLevelUp(int type) 
     {
-    
-    }
+        const float upgradeAmount = 10.0f; // 업그레이드 시 증가하는 양
 
+        switch (type)
+        {
+            case 0: // 공격력 레벨업
+                attackPoint += upgradeAmount;
+                Debug.Log("공격력이 " + attackPoint + "로 증가했습니다.");
+                break;
+            case 1: // 방어력 레벨업
+                defensePoint += upgradeAmount;
+                Debug.Log("방어력이 " + defensePoint + "로 증가했습니다.");
+                break;
+            case 2: // 체력 레벨업
+                maxHealthPoint += (int)upgradeAmount * 10; // 체력은 더 크게 증가
+                Debug.Log("체력이 " + maxHealthPoint + "로 증가했습니다.");
+                break;
+            default:
+                Debug.LogWarning("레벨업 오류");
+                break;
+        }
+    }
 }

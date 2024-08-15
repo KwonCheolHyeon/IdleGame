@@ -18,9 +18,6 @@ public class ShopManager : MonoBehaviour
                 {
                     GameObject singletonObject = new GameObject();
                     instance = singletonObject.AddComponent<ShopManager>();
-
-                    // 수동으로 초기화 메서드 호출
-                    instance.Start();
                 }
             }
             return instance;
@@ -42,91 +39,87 @@ public class ShopManager : MonoBehaviour
     public TextMeshProUGUI healthPointText;
 
 
-    private bool bmIsUpgradUIOn;
+    private bool bmIsUpgradeUIOn;
     private int mAttackLevel;
     private int mDefenseLevel;
     private int mHealthLevel;
+    private const int BaseUpgradeCost = 1000;
 
-
-    private void Start() 
+    private void Awake()
     {
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else if (instance != this)
+        {
+            Destroy(gameObject);
+        }
 
-        bmIsUpgradUIOn = false;
+        Initialize();
     }
 
+    private void Initialize()
+    {
+        bmIsUpgradeUIOn = false;
+        mAttackLevel = 1;
+        mDefenseLevel = 1;
+        mHealthLevel = 1;
+    }
 
     public void UpgradeUIButton()
     {
-        if (!bmIsUpgradUIOn)
+        if (!bmIsUpgradeUIOn)
         {
-            UpgradeUIOn();
+            ToggleUpgradeUI(true);
         }
         else 
         {
-            UpgradeUIOff();
+            ToggleUpgradeUI(false);
         }
     }
-    public void UpgradeUIOn() 
+    private void ToggleUpgradeUI(bool isOn)
     {
-        bmIsUpgradUIOn = true;
-        Vector2 newPosition = bottomMidUI.GetComponent<RectTransform>().anchoredPosition;
-        newPosition.y = -1000;
-        bottomMidUI.GetComponent<RectTransform>().anchoredPosition = newPosition;
+        bmIsUpgradeUIOn = isOn;
+        float newPositionY = isOn ? -1000 : -1500;
+        SetUIPosition(bottomMidUI, newPositionY);
     }
 
-    public void UpgradeUIOff()
+    private void SetUIPosition(GameObject uiObject, float yPosition)
     {
-        bmIsUpgradUIOn = false;
-        Vector2 newPosition = bottomMidUI.GetComponent<RectTransform>().anchoredPosition;
-        newPosition.y = -1500;
-        bottomMidUI.GetComponent<RectTransform>().anchoredPosition = newPosition;
+        Vector2 newPosition = uiObject.GetComponent<RectTransform>().anchoredPosition;
+        newPosition.y = yPosition;
+        uiObject.GetComponent<RectTransform>().anchoredPosition = newPosition;
     }
 
     public void UpgradeAttackPoint()
     {
-        int money = 1000 * mAttackLevel;
-        if (!GameManager.Instance.SpendMoney(money)) 
-        {
-            return;
-        }
-        else
-        {
-            mAttackLevel += 1;
-            money = 1000 * mAttackLevel;
-            attackText.text = "Money : " + money;
-            attackLevelText.text = "Lv. " + mAttackLevel;
-        }
+        UpgradePoint(ref mAttackLevel, attackText, attackLevelText, 0);
     }
 
     public void UpgradeDefensePoint()
     {
-        int money = 1000 * mDefenseLevel;
-        if (!GameManager.Instance.SpendMoney(money))
-        {
-            return;
-        }
-        else
-        {
-            mDefenseLevel += 1;
-            money = 1000 * mDefenseLevel;
-            defenseText.text = "Money : " + money;
-            defenseLevelText.text = "Lv. " + mDefenseLevel;
-        }
+        UpgradePoint(ref mDefenseLevel, defenseText, defenseLevelText, 1);
     }
 
     public void UpgradeHealthPoint()
     {
-        int money = 1000 * mHealthLevel;
+        UpgradePoint(ref mHealthLevel, healthText, healthLevelText, 2);
+    }
+
+    private void UpgradePoint(ref int level, TextMeshProUGUI text, TextMeshProUGUI levelText,int type)
+    {
+        int money = BaseUpgradeCost * level;
         if (!GameManager.Instance.SpendMoney(money))
         {
             return;
         }
-        else
-        {
-            mHealthLevel += 1;
-            money = 1000 * mHealthLevel;
-            healthText.text = "Money : " + money;
-            healthLevelText.text = "Lv. " + mHealthLevel;
-        }
+
+        level += 1;
+        money = BaseUpgradeCost * level;
+        text.text = "Money : " + money;
+        levelText.text = "Lv. " + level;
+        GameManager.Instance.player.PlayerLevelUp(type);
     }
 }
