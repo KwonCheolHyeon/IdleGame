@@ -103,27 +103,31 @@ public class PlayerScript : MonoBehaviour
         attackRange = 1.0f;
     }
 
-    public void PlayerLevelUp(int type) 
+    public int PlayerLevelUp(int type) 
     {
         const float upgradeAmount = 10.0f; // 업그레이드 시 증가하는 양
-
+        int power = 0;
         switch (type)
         {
             case 0: // 공격력 레벨업
                 attackPoint += upgradeAmount;
+                power = (int)attackPoint;
                 Debug.Log("공격력이 " + attackPoint + "로 증가했습니다.");
                 break;
             case 1: // 방어력 레벨업
                 defensePoint += upgradeAmount;
+                power = (int)defensePoint;
                 Debug.Log("방어력이 " + defensePoint + "로 증가했습니다.");
                 break;
             case 2: // 체력 레벨업
                 maxHealthPoint += (int)upgradeAmount * 10; // 체력은 더 크게 증가
+                power = (int)maxHealthPoint;
                 Debug.Log("체력이 " + maxHealthPoint + "로 증가했습니다.");
                 break;
             default:
                 Debug.LogWarning("레벨업 오류");
                 break;
         }
+        return power;
     }
 }

@@ -43,7 +43,7 @@ public class ShopManager : MonoBehaviour
     private int mAttackLevel;
     private int mDefenseLevel;
     private int mHealthLevel;
-    private const int BaseUpgradeCost = 1000;
+    private const int BaseUpgradeCost = 500;
 
     private void Awake()
     {
@@ -95,20 +95,20 @@ public class ShopManager : MonoBehaviour
 
     public void UpgradeAttackPoint()
     {
-        UpgradePoint(ref mAttackLevel, attackText, attackLevelText, 0);
+        UpgradePoint(ref mAttackLevel, attackText, attackLevelText, attackPointText, 0);
     }
 
     public void UpgradeDefensePoint()
     {
-        UpgradePoint(ref mDefenseLevel, defenseText, defenseLevelText, 1);
+        UpgradePoint(ref mDefenseLevel, defenseText, defenseLevelText, defensePointText, 1);
     }
 
     public void UpgradeHealthPoint()
     {
-        UpgradePoint(ref mHealthLevel, healthText, healthLevelText, 2);
+        UpgradePoint(ref mHealthLevel, healthText, healthLevelText, healthPointText, 2);
     }
 
-    private void UpgradePoint(ref int level, TextMeshProUGUI text, TextMeshProUGUI levelText,int type)
+    private void UpgradePoint(ref int level, TextMeshProUGUI text, TextMeshProUGUI levelText, TextMeshProUGUI pointText, int type)
     {
         int money = BaseUpgradeCost * level;
         if (!GameManager.Instance.SpendMoney(money))
@@ -120,6 +120,7 @@ public class ShopManager : MonoBehaviour
         money = BaseUpgradeCost * level;
         text.text = "Money : " + money;
         levelText.text = "Lv. " + level;
-        GameManager.Instance.player.PlayerLevelUp(type);
+        int power = GameManager.Instance.player.PlayerLevelUp(type);
+        pointText.text = "+ " + power;
     }
 }
