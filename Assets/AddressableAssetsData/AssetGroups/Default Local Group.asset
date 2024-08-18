@@ -1,0 +1,70 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Default Local Group
+  m_EditorClassIdentifier: 
+  m_GroupName: Default Local Group
+  m_Data:
+    m_SerializedData: []
+  m_GUID: 3d70569f7729dd44b99271b6a6db7d38
+  m_SerializeEntries:
+  - m_GUID: 0dbcebc507a47d44a8e639108d859f99
+    m_Address: SPUM/SPUM_Units/Unit003
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c2bf2eb72eab6be449a7dd01ab8239eb
+    m_Address: SPUM/SPUM_Units/Unit002
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 06d8e42c091d76049871fda54184c181
+    m_Address: SPUM/SPUM_Units/Unit001
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ba45d2cfd8e22fe4fbf50f8aad035ff6
+    m_Address: SPUM/SPUM_Units/Unit000
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 457f48fbbc76dfd4086bb638b5a593f7
+    m_Address: SPUM/SPUM_Units/Enemy03
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d6c45d14538773742a369988c9798682
+    m_Address: SPUM/SPUM_Units/Enemy02
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a6216a7d4f31a574d9dc45ae1a4ad418
+    m_Address: SPUM/SPUM_Units/Unit004
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cf11e8488cccab646a957e76652ffffd
+    m_Address: SPUM/SPUM_Units/Unit005
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ee52c3f8553aa964ba7a0cd714207a0f
+    m_Address: SPUM/SPUM_Units/Enemy01
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 0a27870fd674d094fa9ce5b2b990aefa, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: d51581b7d774cf34aa720c6b21c59b6d, type: 2}
+    - {fileID: 11400000, guid: 72df4e74e384b634a9619d5fe602f1a6, type: 2}
